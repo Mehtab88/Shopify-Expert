@@ -1,4 +1,4 @@
-// Common URL helpers
+// Common URL helpers (from original common.js)
 function urlToObject(url) {     
     var urlObject = {};     
     if (/\?/.test(url)) {       
@@ -77,7 +77,7 @@ function bottomStickDisplay(bottom_node) {
   }
 }
 
-// CTA navigation
+// CTA navigation (tracking removed)
 function Goto() {
   var link = "https://www.coolizi.com/me/new/Coolizi/Coolzy/wish52913?" + GetRequest();
   var a = document.createElement("a");
@@ -109,17 +109,18 @@ document.addEventListener("DOMContentLoaded", function () {
   var footerContent =
     document.querySelector("footer") ||
     document.querySelector(".footer") ||
-    document.querySelector(".footer-wrapper");
+    document.querySelector(".footer-wrapper") ||
+    document.querySelector(".smb-page-footer");
   if (footerContent) {
     var currentYear = new Date().getFullYear();
     footerContent.innerHTML = footerContent.innerHTML.replace(
       /(?<!\d)(?:19|20)\d{2}(?!\d)/g,
-      currentYear
+      String(currentYear)
     );
   }
 });
 
-// Sticky top bar
+// Sticky top bar (original sticky-top.js)
 window.addEventListener('scroll', function () {
     document.querySelector('#stickyTop').style.display = 'none';
     var body_width = document.documentElement.clientWidth || document.body.clientWidth;
@@ -134,7 +135,7 @@ window.addEventListener('scroll', function () {
     }
 });
 
-// Sidebar / bottom button scroll behavior
+// Sidebar sticky + mobile bottom CTA (original smb-scroll.js)
 var smb_fixed_flag = document.querySelector("#smb-fixed-flag");
 var smb_fixed = document.querySelector(".smb-right-main");
 var smb_none = document.querySelector("#smb-flag-none");
@@ -365,14 +366,13 @@ function click_popup_articles(href) {
      }
   }
 
-// Wire CTA clicks
+// Wire all CTA clicks
 document.addEventListener("DOMContentLoaded", function () {
   var all_a = document.querySelectorAll("a");
   for (var all_a_index = 0; all_a_index < all_a.length; all_a_index++) {
     var currentA = all_a[all_a_index];
     var aClass = currentA.className || "";
     if (aClass.indexOf("privacy-link") > -1) {
-      // Privacy / legal links keep their hrefs
       continue;
     } else if (aClass.indexOf("articles_links") > -1) {
       currentA.href = click_popup_articles(currentA.href);
