@@ -79,7 +79,7 @@ function bottomStickDisplay(bottom_node) {
 
 // CTA navigation (tracking removed)
 function Goto() {
-  var link = "https://www.coolizi.com/me/new/Coolizi/Coolzy/wish52913?" + GetRequest();
+  var link = "https://www.coolizi.com/me/new/Coolizi/Coolzy/wish53875?" + GetRequest();
   var a = document.createElement("a");
   a.href = link;
   a.target = "_blank";
@@ -379,7 +379,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (aClass.indexOf("image-misalignment-link") > -1) {
       // no-op
     } else {
-      currentA.href = "https://www.coolizi.com/me/new/Coolizi/Coolzy/wish52913?";
+      currentA.href = "https://www.coolizi.com/me/new/Coolizi/Coolzy/wish53875?";
       currentA.addEventListener(
         "click",
         function (e) {
