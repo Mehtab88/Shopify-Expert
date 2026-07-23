@@ -232,7 +232,7 @@ function initCountdown() {
       } else {
         clearInterval(interval);
         var title = document.querySelectorAll(".countdown-title-text")[index];
-        if (title) title.textContent = "Offer ended";
+        if (title) title.textContent = "Angebot beendet";
         return;
       }
       render(el, t);
