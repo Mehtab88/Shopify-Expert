@@ -3,994 +3,361 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Big City Furniture Growth Audit | August 14, 2026</title>
+  <title>Big City Furniture — Growth Audit</title>
   <style>
     :root {
-      --navy: #1b2a41;
-      --navy-deep: #122033;
-      --ink: #243044;
-      --muted: #5c6b7a;
-      --line: #d9d3c7;
-      --paper: #f7f4ee;
-      --white: #fffcf7;
-      --gold: #b0894a;
-      --gold-soft: #e8d7b3;
-      --high: #9b2335;
-      --high-bg: #f8e8ea;
-      --med: #9a6700;
-      --med-bg: #f8efd6;
-      --low: #1f6b4f;
-      --low-bg: #e5f3ec;
-      --serif: "Palatino Linotype", Palatino, "Iowan Old Style", "Book Antiqua", Georgia, serif;
-      --sans: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      --navy: #1e2d3d;
+      --ink: #2c333a;
+      --muted: #5e6a75;
+      --line: #d8dde2;
+      --soft: #f4f6f8;
+      --accent: #c45c26;
+      --green: #1f6b4a;
     }
-
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
     body {
-      background: #ece7de;
+      background: #e8eaed;
       color: var(--ink);
-      font-family: var(--sans);
-      font-size: 11pt;
-      line-height: 1.55;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 10.2pt;
+      line-height: 1.45;
     }
+    .bar {
+      position: sticky; top: 0; z-index: 5;
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--navy); color: #fff; padding: 10px 20px; font-size: 12px;
+    }
+    .bar button {
+      background: #fff; color: var(--navy); border: 0; padding: 7px 12px;
+      font-weight: 700; cursor: pointer; border-radius: 3px;
+    }
+    .doc { width: 210mm; max-width: 100%; margin: 20px auto 40px; background: #fff; box-shadow: 0 10px 40px rgba(0,0,0,.12); }
 
-    .toolbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: center;
-      background: var(--navy);
-      color: #fff;
-      padding: 12px 22px;
-      font-size: 13px;
-    }
-    .toolbar strong { color: var(--gold-soft); }
-    .toolbar button {
-      background: var(--gold);
-      color: var(--navy-deep);
-      border: 0;
-      border-radius: 4px;
-      padding: 8px 14px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .report {
-      width: 210mm;
-      max-width: 100%;
-      margin: 24px auto 48px;
-      background: var(--white);
-      box-shadow: 0 18px 50px rgba(18, 32, 51, 0.18);
-    }
-
-    .cover {
-      background: linear-gradient(165deg, var(--navy-deep) 0%, var(--navy) 58%, #2d415c 100%);
-      color: #f4efe6;
-      min-height: 277mm;
-      padding: 24mm 20mm 18mm;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+    .sheet {
+      padding: 15mm 16mm 12mm;
       page-break-after: always;
       break-after: page;
     }
-    .cover-kicker {
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      font-size: 11px;
-      color: var(--gold-soft);
-      font-weight: 700;
-    }
-    .cover h1 {
-      font-family: var(--serif);
-      font-size: 42px;
-      line-height: 1.12;
-      margin: 16px 0 8px;
-      font-weight: 600;
-      max-width: 14ch;
-    }
-    .cover .rule {
-      width: 72px;
-      height: 3px;
-      background: var(--gold);
-      margin: 18px 0 22px;
-    }
-    .cover-sub {
-      font-size: 16px;
-      color: #d7c9a8;
-      max-width: 42ch;
-    }
-    .cover-meta {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px 24px;
-      border-top: 1px solid rgba(232, 215, 179, 0.28);
-      padding-top: 22px;
-      margin-top: 40px;
-    }
-    .cover-meta dt {
-      font-size: 10px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--gold-soft);
-      margin-bottom: 4px;
-    }
-    .cover-meta dd {
-      margin: 0;
-      font-size: 14px;
-    }
-    .cover-meta a { color: #fff; text-decoration: none; }
-    .cover-foot {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      font-size: 12px;
-      color: #cbbd9d;
-    }
+    .sheet:last-child { page-break-after: auto; break-after: auto; }
 
-    .inner { padding: 16mm 16mm 18mm; }
-    .toc { page-break-after: always; break-after: page; }
-    h1.sec {
-      font-family: var(--serif);
-      font-size: 26px;
-      color: var(--navy);
-      margin: 0 0 8px;
-      page-break-before: avoid;
-      break-before: avoid;
-      page-break-after: avoid;
-    }
-    .inner > section[id] {
-      page-break-before: always;
-      break-before: page;
-    }
-    .toc {
-      page-break-before: auto;
-      break-before: auto;
-    }
-    h2 {
-      font-family: var(--serif);
-      font-size: 16.5px;
-      color: var(--navy);
-      margin: 22px 0 8px;
-      page-break-after: avoid;
-    }
-    h3 {
-      font-size: 12.5px;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin: 18px 0 8px;
-      page-break-after: avoid;
-    }
-    p { margin: 0 0 10px; }
+    h1 { font-size: 26px; letter-spacing: -0.02em; margin: 0 0 6px; color: var(--navy); font-weight: 700; }
+    h2 { font-size: 12.5px; margin: 13px 0 6px; color: var(--navy); letter-spacing: 0.04em; text-transform: uppercase; border-bottom: 1.5px solid var(--navy); padding-bottom: 3px; }
+    h3 { font-size: 11px; margin: 12px 0 6px; color: var(--navy); }
+    p { margin: 0 0 8px; }
+    ul { margin: 0 0 8px; padding-left: 16px; }
+    li { margin: 0 0 3px; }
     a { color: var(--navy); }
-    ul, ol { margin: 0 0 12px; padding-left: 18px; }
-    li { margin: 0 0 4px; }
-    strong { color: var(--navy-deep); }
 
-    .eyebrow {
-      font-size: 10px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--gold);
-      font-weight: 700;
-      margin-bottom: 6px;
-      page-break-after: avoid;
-      break-after: avoid;
-    }
-    .lede {
-      font-size: 13.5px;
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
+    .kicker { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+    .meta { color: var(--muted); font-size: 9.5pt; margin-bottom: 14px; }
+    .meta span { display: inline-block; margin-right: 14px; }
+    .rule { height: 3px; width: 42px; background: var(--accent); margin: 10px 0 14px; }
 
-    .pri {
-      display: inline-block;
-      font-size: 9px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      border-radius: 999px;
-      padding: 3px 8px;
-      vertical-align: middle;
-      white-space: nowrap;
-    }
-    .pri-high { background: var(--high-bg); color: var(--high); }
-    .pri-med { background: var(--med-bg); color: var(--med); }
-    .pri-low { background: var(--low-bg); color: var(--low); }
+    table { width: 100%; border-collapse: collapse; font-size: 9pt; margin: 6px 0 10px; }
+    th { text-align: left; background: var(--navy); color: #fff; padding: 5px 7px; font-weight: 600; }
+    td { border-bottom: 1px solid var(--line); padding: 5px 7px; vertical-align: top; }
+    tr:nth-child(even) td { background: var(--soft); }
 
-    .callout {
-      border-left: 4px solid var(--gold);
-      background: var(--paper);
-      padding: 12px 14px;
-      margin: 14px 0;
-      page-break-inside: avoid;
-    }
-    .callout.alert { border-left-color: var(--high); background: var(--high-bg); }
-    .callout.idea { border-left-color: var(--navy); }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+    .box { background: var(--soft); padding: 10px 12px; border-left: 3px solid var(--navy); }
+    .box p:last-child, .note p:last-child { margin: 0; }
+    .note { background: #fbf4ee; border-left: 3px solid var(--accent); padding: 10px 12px; margin: 10px 0; }
 
-    .grid-3, .grid-2, .leak-grid {
-      display: grid;
-      gap: 10px;
-      margin: 14px 0 18px;
-    }
-    .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-    .grid-2, .leak-grid { grid-template-columns: 1fr 1fr; }
-    .card, .leak {
-      border: 1px solid var(--line);
-      background: var(--paper);
-      padding: 12px 13px;
-      page-break-inside: avoid;
-    }
-    .card h3, .leak h3 { margin-top: 6px; }
-    .stat {
-      font-family: var(--serif);
-      font-size: 26px;
-      color: var(--navy);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-    .stat span { font-size: 13px; color: var(--muted); }
+    .pri { font-size: 8px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 1px 6px; border-radius: 2px; white-space: nowrap; }
+    .p1 { background: #f3e4dc; color: #9a3b12; }
+    .p2 { background: #eee8d8; color: #7a5b12; }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 10px 0 16px;
-      font-size: 9.6pt;
-      page-break-inside: auto;
-    }
-    thead { display: table-header-group; }
-    th {
-      text-align: left;
-      background: var(--navy);
-      color: #fff;
-      padding: 7px 8px;
-      font-weight: 600;
-    }
-    td {
-      border-bottom: 1px solid var(--line);
-      padding: 7px 8px;
-      vertical-align: top;
-    }
-    tr { page-break-inside: avoid; }
-    tbody tr:nth-child(even) { background: var(--paper); }
+    .foot { margin-top: 10px; padding-top: 6px; border-top: 1px solid var(--line); font-size: 8pt; color: var(--muted); display: flex; justify-content: space-between; page-break-inside: avoid; break-inside: avoid; }
 
-    .rec {
-      display: grid;
-      grid-template-columns: 86px 1fr;
-      gap: 10px;
-      border-bottom: 1px solid var(--line);
-      padding: 9px 0;
-      page-break-inside: avoid;
-    }
-    .rec:last-child { border-bottom: 0; }
-    .rec p { margin: 0; }
-    .rec small { color: var(--muted); }
+    .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .cover-top small { color: var(--muted); font-size: 8.5pt; text-align: right; }
+    .overview { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 12px 0 14px; }
+    .overview div { background: var(--soft); padding: 9px 10px; }
+    .overview b { display: block; font-size: 8px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
 
-    .toc-list { list-style: none; padding: 0; margin: 0; }
-    .toc-list li {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      border-bottom: 1px dotted var(--line);
-      padding: 8px 0;
-      margin: 0;
-    }
-    .toc-list a { text-decoration: none; color: var(--navy); font-weight: 600; }
-    .toc-num { color: var(--gold); font-family: var(--serif); }
+    .week { margin-bottom: 8px; }
+    .week h3 { margin: 0 0 4px; }
+    .num { color: var(--accent); font-weight: 700; }
 
-    .quote {
-      font-family: var(--serif);
-      font-size: 18px;
-      line-height: 1.35;
-      color: var(--navy);
-      margin: 8px 0 6px;
-    }
-    .tree {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      padding: 12px 16px;
-      font-size: 10.5pt;
-      line-height: 1.7;
-      page-break-inside: avoid;
-    }
-    .kpi { color: var(--low); font-weight: 700; }
-    .down { color: var(--high); font-weight: 700; }
-
-    .footer-note {
-      margin-top: 22px;
-      padding-top: 12px;
-      border-top: 1px solid var(--line);
-      font-size: 9.5pt;
-      color: var(--muted);
-    }
-    .section-label {
-      float: right;
-      margin-top: 6px;
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    @page {
-      size: A4 portrait;
-      margin: 12mm 12mm 14mm 12mm;
-    }
-
+    @page { size: A4 portrait; margin: 12mm 13mm 14mm 13mm; }
     @media print {
-      .toolbar { display: none !important; }
+      .bar { display: none !important; }
       body { background: #fff; }
-      .report {
-        width: auto;
-        margin: 0;
-        box-shadow: none;
-      }
-      .cover {
-        min-height: 271mm;
-        height: 271mm;
-        max-height: 271mm;
-        padding: 16mm 8mm 10mm;
-        overflow: hidden;
-        break-after: page;
-        page-break-after: always;
-      }
-      .inner { padding: 0; }
-      a { text-decoration: none; color: inherit; }
-      .toc { page-break-after: always; break-after: page; }
-      h2, h3 { page-break-after: avoid; break-after: avoid; }
+      .doc { width: auto; margin: 0; box-shadow: none; }
+      .sheet { padding: 0; min-height: 0; }
     }
-
-    @media screen and (max-width: 900px) {
-      .report { width: auto; margin: 0; }
-      .grid-3, .grid-2, .leak-grid, .cover-meta { grid-template-columns: 1fr; }
-      .cover { min-height: auto; padding: 40px 24px; }
-      .inner { padding: 24px; }
-      .rec { grid-template-columns: 1fr; }
+    @media screen and (max-width: 800px) {
+      .doc { width: auto; margin: 0; }
+      .cols, .overview { grid-template-columns: 1fr; }
+      .sheet { min-height: 0; padding: 24px; }
     }
   </style>
 </head>
 <body>
-  <div class="toolbar">
-    <div>Print this file as PDF: choose <strong>A4</strong> and enable <strong>Background graphics</strong>.</div>
+  <div class="bar">
+    <span>A4 · enable Background graphics when saving as PDF</span>
     <button type="button" onclick="window.print()">Save as PDF</button>
   </div>
 
-  <main class="report">
-    <section class="cover">
-      <div>
-        <div class="cover-kicker">Confidential client report</div>
-        <h1>Big City Furniture Growth Audit</h1>
-        <div class="rule"></div>
-        <p class="cover-sub">A conversion, local SEO, and paid-media growth plan for a physical furniture showroom with a Shopify ecommerce catalog.</p>
-        <dl class="cover-meta">
-          <div>
-            <dt>Website</dt>
-            <dd><a href="https://www.bigcityfurniturestore.com/">www.bigcityfurniturestore.com</a></dd>
-          </div>
-          <div>
-            <dt>Business type</dt>
-            <dd>Physical furniture store + Shopify ecommerce</dd>
-          </div>
-          <div>
-            <dt>Location</dt>
-            <dd>3010 Two Notch Road, Columbia, SC 29204</dd>
-          </div>
-          <div>
-            <dt>Audit date</dt>
-            <dd>August 14, 2026</dd>
-          </div>
-          <div>
-            <dt>Phone</dt>
-            <dd>803-500-0101</dd>
-          </div>
-          <div>
-            <dt>Catalog snapshot</dt>
-            <dd>~6,628 products · 123 collections</dd>
-          </div>
-        </dl>
+  <article class="doc">
+
+    <!-- PAGE 1 -->
+    <section class="sheet">
+      <div class="cover-top">
+        <div class="kicker">Confidential</div>
+        <small>Prepared 14 August 2026<br>Columbia, South Carolina</small>
       </div>
-      <div class="cover-foot">
-        <div>Ecommerce CRO · Local SEO · Google Ads · Meta Ads</div>
-        <div>Prepared for Big City Furniture / Glory Movement LLC</div>
+      <h1>Big City Furniture<br>Growth Audit</h1>
+      <div class="rule"></div>
+      <p class="meta">
+        <span>www.bigcityfurniturestore.com</span>
+        <span>3010 Two Notch Road, Columbia, SC 29204</span>
+        <span>803-500-0101</span>
+      </p>
+
+      <h2>Business overview</h2>
+      <div class="overview">
+        <div><b>Model</b>Showroom + Shopify ecommerce. Division of Glory Movement LLC.</div>
+        <div><b>Catalog</b>~6,600 SKUs. ACME, Foagroup, Sealy, Tempur-Pedic. Synchrony + Shop Pay.</div>
+        <div><b>Hours listed</b>Mon–Sat 10–7 on the homepage; 10–8 in policies. Sunday not stated.</div>
       </div>
+      <p>This is a real furniture store with a large online catalog. The opportunity is to turn Two Notch Road walk-ins, phone orders, and ecommerce into one system — not to out-Wayfair Wayfair with 6,600 unmerchandised SKUs.</p>
+
+      <h2>Executive summary</h2>
+      <p>The site looks like a dealer catalog, not a Columbia retailer. Shoppers cannot tell you have a showroom, what delivery costs, whether a sofa will fit, or why they should choose you over Ashley, Rooms To Go, or Havertys.</p>
+      <p>Four issues are costing you visits and sales right now:</p>
+      <ol>
+        <li><strong>The store is invisible.</strong> No map, no “see it in person,” no LocalBusiness markup, and a third-party listing at 9005 Two Notch Rd #0184 that does not match 3010.</li>
+        <li><strong>Product pages cannot close a furniture sale.</strong> Titles are SKUs (Safi Sofa LV00216). Specs read like a wholesale sheet (“Foam Density: D28”). Shipping is “calculated at checkout.”</li>
+        <li><strong>Trust is unfinished.</strong> The contact page still has Shopify placeholder copy. Product pages say “Describe your recently viewed products here.” Returns are 2 days with a 15–20% restocking fee.</li>
+        <li><strong>The catalog is messy.</strong> /collections/all has 0 products. Sofas include sofa tables. 122 of 123 collections have no SEO text. Duplicate “Copy” collections are live.</li>
+      </ol>
+      <div class="note">
+        <p><strong>Recommended focus:</strong> win the Midlands first — showroom, local delivery, financing, Sealy/Tempur — then advertise a cleaned set of ~150 best sellers. Do not put the full catalog into Google Shopping as it stands.</p>
+      </div>
+      <div class="foot"><span>Big City Furniture · Growth Audit</span><span>1 / 5</span></div>
     </section>
 
-    <div class="inner">
-      <section class="toc">
-        <div class="eyebrow">Contents</div>
-        <h1 class="sec" style="page-break-before:auto;break-before:auto;">How to use this report</h1>
-        <p class="lede">Findings are based on the live storefront, Shopify JSON, on-page schema, and public local-market information. Priority labels mark what to do first.</p>
-        <ul class="toc-list">
-          <li><a href="#exec"><span class="toc-num">01</span> &nbsp; Executive summary</a></li>
-          <li><a href="#snapshot"><span class="toc-num">02</span> &nbsp; Business snapshot</a></li>
-          <li><a href="#cro"><span class="toc-num">03</span> &nbsp; CRO audit — homepage, journey, product pages, checkout</a></li>
-          <li><a href="#local"><span class="toc-num">04</span> &nbsp; Local SEO &amp; Google Business Profile</a></li>
-          <li><a href="#google"><span class="toc-num">05</span> &nbsp; Google Ads strategy</a></li>
-          <li><a href="#meta"><span class="toc-num">06</span> &nbsp; Meta Ads strategy</a></li>
-          <li><a href="#market"><span class="toc-num">07</span> &nbsp; Competitor &amp; market opportunities</a></li>
-          <li><a href="#plan"><span class="toc-num">08</span> &nbsp; 90-day action plan &amp; KPIs</a></li>
-        </ul>
-        <div class="grid-3" style="margin-top:28px;">
-          <div class="card"><div class="stat">6</div>Revenue leaks ranked by impact</div>
-          <div class="card"><div class="stat">50</div>Prioritized actions across 90 days</div>
-          <div class="card"><div class="stat">150</div>Hero SKUs to merchandise first</div>
+    <!-- PAGE 2 -->
+    <section class="sheet">
+      <div class="kicker">Conversion</div>
+      <h1 style="font-size:22px;">CRO findings</h1>
+
+      <h2>Homepage</h2>
+      <p>Above the fold is “Trendy &amp; Modern / Upgrade Your Home Today.” That could be any furniture URL. There is no city, no offer, and no reason to visit 3010 Two Notch. “Pay over Time” is the strongest line on the page and it is treated as a strip, not a number ($X/month or 0% for X months).</p>
+      <div class="cols">
+        <div>
+          <h3>Fix now</h3>
+          <ul>
+            <li>Lead with Columbia showroom + delivery. Two buttons: Shop living rooms / Get directions.</li>
+            <li>Correct <strong>Dinning</strong>. Remove duplicate FAQs (brand question is pasted twice).</li>
+            <li>Replace first-name testimonials with Google rating or take them down until they can be verified.</li>
+            <li>Put a real offer in the bar: free local delivery over a threshold, or a Synchrony term you actually have.</li>
+          </ul>
         </div>
-        <div class="callout">
-          <strong>Priority key.</strong>
-          <span class="pri pri-high">High</span> do in the next 0–30 days or it is leaking revenue now.
-          <span class="pri pri-med">Medium</span> build in 30–90 days.
-          <span class="pri pri-low">Low</span> longer-term advantage after the foundation is in place.
+        <div>
+          <h3>Stop doing</h3>
+          <ul>
+            <li>Mixing sofa tables into “top living collections.”</li>
+            <li>Prices rendering as $3,112.50 / — looks broken.</li>
+            <li>Sending people to /collections/all (zero products). Use /collections/all-products.</li>
+            <li>Empty Luxury Bedroom and Bed Frames collections in the menu path.</li>
+          </ul>
         </div>
-      </section>
+      </div>
 
-      <section id="exec">
-        <div class="eyebrow">Section 01</div>
-        <h1 class="sec">Executive summary</h1>
-        <p>Big City Furniture has a real commercial foundation: a Columbia, SC showroom on Two Notch Road, a large wholesale catalog (ACME, Foagroup, Sealy, Tempur-Pedic), Synchrony financing, and Shop Pay. That combination can win store visits, financed tickets, and shipped orders.</p>
-        <p>The site is not converting that foundation. It currently reads like a <strong>manufacturer catalog uploaded to Shopify</strong>, not like a trusted local furniture retailer. Shoppers cannot quickly tell who you are, where you are, why they should buy here, what delivery costs, whether they can sit on the sofa in-store, or what happens if the piece does not fit.</p>
+      <h2>Product pages</h2>
+      <p>Reviewed Safi Sofa ($2,350) and Sealy Paterson II. Mattress copy from Sealy is usable. ACME upholstery is not. A $2,350 sofa with one bullet and no dimensions will not convert, locally or nationally.</p>
+      <table>
+        <thead><tr><th>Gap</th><th>What is live today</th><th>What to show instead</th></tr></thead>
+        <tbody>
+          <tr><td>Title</td><td>Safi Sofa LV00216</td><td>Safi Leather Sofa — SKU in the spec table only</td></tr>
+          <tr><td>Copy</td><td>Foam Density: D28 (also the Google meta)</td><td>Who it’s for, W×D×H, seat depth, material, assembly</td></tr>
+          <tr><td>Delivery</td><td>Calculated at checkout</td><td>Local white glove vs freight, typical days, ZIP estimate</td></tr>
+          <tr><td>Finance</td><td>Apply, then “shop in-store”</td><td>Monthly price on the PDP, or say Shop Pay online / Synchrony in store</td></tr>
+          <tr><td>Related</td><td>“No related products available”</td><td>Nightstand with bed, ottoman with sofa, foundation with mattress</td></tr>
+          <tr><td>Hygiene</td><td>“SIze”, Default Title, leftover theme text</td><td>Hide unused selectors; delete placeholders</td></tr>
+        </tbody>
+      </table>
+      <p>Round hero prices off .50 endings. Align mattress ranges — homepage $899–$1,399 does not match Paterson II at $999 Queen.</p>
 
-        <div class="callout idea">
-          <p class="quote">Win Columbia–Midlands first. Then scale ecommerce on a cleaned subset of best sellers — not the raw 6,600-SKU dump.</p>
-          <p style="margin:0;color:var(--muted);">Showroom + local delivery + financing + Sealy/Tempur, then photography, dimensions, and delivery promises on ~150 hero products.</p>
+      <h2>Trust and conversion</h2>
+      <ul>
+        <li>Rewrite the contact page. Add address, map, hours, click-to-call. The Shopify default sentence has to go.</li>
+        <li>About Us: “Thank you for allowing you to serve you!” Fix it. Stop repeating the phone block.</li>
+        <li>Terms still cite BigCityFurniture.com. Live domain is bigcityfurniturestore.com.</li>
+        <li>One hours line everywhere. Pick 7pm or 8pm. Add Sunday closed.</li>
+        <li>Returns at 2 days plus restocking will abort checkout. For stocked (non-custom) pieces, 14 days is closer to what shoppers expect. If mattresses have no trial, say so before add to cart.</li>
+        <li>Enable pickup for floor samples. Many tickets will still close on the phone — treat 803-500-0101 as a conversion, not a footer extra.</li>
+      </ul>
+      <div class="foot"><span>Big City Furniture · Growth Audit</span><span>2 / 5</span></div>
+    </section>
+
+    <!-- PAGE 3 -->
+    <section class="sheet">
+      <div class="kicker">Acquisition</div>
+      <h1 style="font-size:22px;">Local SEO and paid media</h1>
+
+      <h2>Local SEO and Google Business Profile</h2>
+      <p>Ashley (Harbison, newly renovated), Rooms To Go, Havertys, and Kimbrell’s already own the obvious searches. You can still win Two Notch, Northeast Columbia, bunk beds, Tempur-Pedic, and financing — but the site barely claims a location. Homepage title is “Big City Furniture.” Meta description is missing. Schema is Organization only, not FurnitureStore.</p>
+      <div class="cols">
+        <div class="box">
+          <h3>GBP — first 14 days</h3>
+          <ul>
+            <li>Verify <strong>3010 Two Notch Road</strong> (confirm this is the public showroom first).</li>
+            <li>Category: Furniture store. Hours matching the site. Phone 803-500-0101.</li>
+            <li>20 showroom photos, cover of the storefront, 8 Q&amp;As, weekly posts.</li>
+            <li>Correct or suppress the 9005 Two Notch listing if it is not you.</li>
+            <li>QR at the counter. Target 8–12 Google reviews a month until you pass 50.</li>
+          </ul>
         </div>
-
-        <h2>Biggest leaks, in order of revenue impact</h2>
-        <div class="leak-grid">
-          <article class="leak"><h3>01 · Trust <span class="pri pri-high">High</span></h3><p>Homepage testimonials look generic. The Contact page still shows Shopify placeholder copy. Product pages have leftover theme text. There is no review app, no Google rating on-site, and almost no local proof.</p></article>
-          <article class="leak"><h3>02 · Invisible store <span class="pri pri-high">High</span></h3><p>The homepage never leads with Columbia / Two Notch / “visit the showroom.” There is no map, no store photos, no “see it in person” CTA, and no LocalBusiness schema.</p></article>
-          <article class="leak"><h3>03 · Product pages <span class="pri pri-high">High</span></h3><p>Titles are SKUs (<em>Safi Sofa LV00216</em>). Descriptions are wholesale bullets (<em>Foam Density: D28</em>). Dimensions, delivery, financing, and related pieces are missing. Shipping is “calculated at checkout.”</p></article>
-          <article class="leak"><h3>04 · Catalog IA <span class="pri pri-high">High</span></h3><p><code>/collections/all</code> has 0 products. Duplicate and “Copy” collections are live. The Sofas collection includes sofa tables. 122 of 123 collections have empty SEO descriptions.</p></article>
-          <article class="leak"><h3>05 · Policies <span class="pri pri-high">High</span></h3><p>Returns must start within 2 days of delivery, with a 15–20% restocking fee. Mattresses are non-returnable. Hours conflict. Financing copy tells approved customers to visit the store.</p></article>
-          <article class="leak"><h3>06 · Paid media <span class="pri pri-med">Medium</span></h3><p>Shopping ads on 6,600 SKU-titled ACME products will get poor quality scores and likely Merchant Center issues. Meta catalog ads will look the same until the feed is cleaned.</p></article>
+        <div class="box">
+          <h3>On-site local</h3>
+          <ul>
+            <li>NAP in the footer on every page.</li>
+            <li>Showroom page with map, parking, brands, directions from I-20 / Fort Jackson.</li>
+            <li>Short pages for sofas, bedroom, mattresses, bunks (you have 217), financing, Lexington / Irmo / West Columbia.</li>
+            <li>You have unusual bunk depth — use it. PCS / Fort Jackson is seasonal demand the chains are slow on.</li>
+          </ul>
         </div>
-      </section>
+      </div>
 
-      <section id="snapshot">
-        <div class="eyebrow">Section 02</div>
-        <h1 class="sec">Business snapshot</h1>
-        <p class="lede">What we verified on the live site as of August 14, 2026.</p>
-        <table>
-          <thead><tr><th>Item</th><th>Finding</th></tr></thead>
-          <tbody>
-            <tr><td>Platform</td><td>Shopify (Shop ID path /76172230873)</td></tr>
-            <tr><td>Payments advertised</td><td>Visa, Mastercard, Amex, Discover, PayPal, Apple Pay, Google Pay, Shop Pay</td></tr>
-            <tr><td>Financing</td><td>Synchrony apply link in the announcement bar</td></tr>
-            <tr><td>Brands claimed</td><td>ACME Furniture, Foagroup, Tempur-Pedic, Sealy, Big City Furniture collection</td></tr>
-            <tr><td>Catalog mix sampled</td><td>Heavy ACME + Foagroup; Sealy mattresses present</td></tr>
-            <tr><td>Hours (homepage bar)</td><td>Mon–Sat 10am–7pm</td></tr>
-            <tr><td>Hours (policies)</td><td>Mon–Sat 10:00 AM–8:00 PM</td></tr>
-            <tr><td>Sunday</td><td>Closed (not stated clearly on homepage)</td></tr>
-            <tr><td>Shipping claim (FAQ)</td><td>Most in-stock items ship 3–7 business days</td></tr>
-            <tr><td>Shipping claim (policy)</td><td>Standard delivery 7–14 business days after 1–3 day processing</td></tr>
-            <tr><td>White glove</td><td>Mentioned on /pages/shipping-policy only — not on product pages</td></tr>
-            <tr><td>Blog</td><td>/blogs/news is empty</td></tr>
-            <tr><td>Social in schema</td><td>Facebook + Instagram URLs present; other sameAs fields are blank</td></tr>
-            <tr><td>Directory conflict</td><td>Third-party listing for “Big City Furniture LLC” at 9005 Two Notch Rd #0184 with different hours</td></tr>
-            <tr><td>Legal entity</td><td>Division of Glory Movement LLC (from Terms)</td></tr>
-          </tbody>
-        </table>
-      </section>
+      <h2>Google Ads</h2>
+      <p>Do not launch Shopping on 6,600 ACME titles. A feed that advertises “Chateau De Ville Sofa W/5 Pillows (Same LV01588) 58265” with “Foam Density: D28” will waste spend and may fail Merchant Center quality checks.</p>
+      <table>
+        <thead><tr><th>Campaign</th><th>Role</th><th>Share of a $3–6k test month</th></tr></thead>
+        <tbody>
+          <tr><td>Local search (store + sofas, bedroom, dining, mattress, bunks)</td><td>Calls, directions, visits</td><td>35%</td></tr>
+          <tr><td>Shopping — 150–300 cleaned SKUs only</td><td>Ecommerce</td><td>25%</td></tr>
+          <tr><td>Remarketing / Demand Gen</td><td>7–45 day furniture cycle</td><td>15%</td></tr>
+          <tr><td>Brand</td><td>Defend the name</td><td>10%</td></tr>
+          <tr><td>Test (PMax later)</td><td>Only after tracking is clean</td><td>15%</td></tr>
+        </tbody>
+      </table>
+      <p>Geo: 25–35 miles around Columbia. Title format for Shopping: Brand + type + material/color + size. Call tracking is required — a $3,000 sofa often closes on the phone. Primary conversions for local campaigns: calls, direction clicks, purchases. Not add-to-cart.</p>
 
-      <section id="cro">
-        <div class="eyebrow">Section 03</div>
-        <h1 class="sec">CRO audit</h1>
-        <p class="lede">First impression, customer journey, product pages, and checkout. This is where furniture tickets are won or lost.</p>
+      <h2>Meta Ads</h2>
+      <p>Use the existing Facebook and Instagram profiles. White-background ACME carousels will not work. Shoot in the showroom: walk in, sit on three sofas, overlay from $X/month, film delivery and bunks.</p>
+      <ul>
+        <li>Geo 15–25 miles (29204, 29223, 29229, 29212, 29072, 29063). Prospect “this weekend at Two Notch.” Retarget PDPs with financing; carts with delivery; showroom-page viewers with directions.</li>
+        <li>Offers: free local delivery over a threshold, real Synchrony terms, floor-sample weekend, bunk + mattress. No sitewide 40% off — it trains discounting and can break Sealy/Tempur MAP.</li>
+      </ul>
+      <div class="foot"><span>Big City Furniture · Growth Audit</span><span>3 / 5</span></div>
+    </section>
 
-        <h2>3.1 First impression &amp; homepage</h2>
-        <p><strong>Verdict: weak for a high-ticket furniture purchase.</strong> A first-time visitor sees a modern Shopify storefront, a financing strip, and category tiles. They do not see a Columbia showroom, years in business, a Google rating, real customer photos, staff, or a reason to choose Big City over Ashley, Rooms To Go, Havertys, or Wayfair.</p>
+    <!-- PAGE 4 -->
+    <section class="sheet">
+      <div class="kicker">Priorities</div>
+      <h1 style="font-size:22px;">Action plan</h1>
 
-        <h3>Trust damage on the live site</h3>
-        <ul>
-          <li><strong>Contact page still contains Shopify’s default line:</strong> “Share information about your brand with your customers…” This signals an unfinished store.</li>
-          <li><strong>About Us grammar error:</strong> “Thank you for allowing you to serve you!” Phone/email blocks also repeat many times and look broken.</li>
-          <li><strong>Footer English is awkward:</strong> “Fast and reliable shipping on all US order.” / “PAYMENT SECURE.”</li>
-          <li><strong>Homepage reviews are first-name + last-initial only</strong> (Sarah M., James T, Amina K., David R., Priya N., Michael B.) with no product, date, photo, or Google link. If they are not tied to real orders, they should come down immediately.</li>
-        </ul>
+      <h2>Quick wins</h2>
+      <table>
+        <thead><tr><th></th><th>Action</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pri p1">Now</span></td><td>Rewrite Contact and About. Delete placeholders and “recently viewed” theme copy.</td><td>Unfinished pages kill high-ticket trust.</td></tr>
+          <tr><td><span class="pri p1">Now</span></td><td>Footer NAP, click-to-call, FurnitureStore schema, homepage title/meta with Columbia.</td><td>Google cannot rank a store you do not claim.</td></tr>
+          <tr><td><span class="pri p1">Now</span></td><td>Unpublish empty/Copy collections. Point “All” to all-products. Retag sofa tables out of Sofas.</td><td>Dead ends and dirty categories.</td></tr>
+          <tr><td><span class="pri p1">Now</span></td><td>PDP: dimensions on top sellers, delivery blurb, financing CTA. Hide Default Title.</td><td>Furniture will not sell without fit and freight.</td></tr>
+          <tr><td><span class="pri p1">Now</span></td><td>Claim GBP. 20 photos. Review QR. One hours policy. Fix Terms domain.</td><td>Highest-ROI local work this month.</td></tr>
+          <tr><td><span class="pri p2">Next</span></td><td>Announcement bar with a real offer. Cart ZIP estimate. Local pickup if stock allows.</td><td>Removes the two biggest checkout surprises.</td></tr>
+        </tbody>
+      </table>
 
-        <h3>Above the fold</h3>
-        <p>Current fold: announcement (“Shop Now Pay over Time” + hours) and a hero slideshow (“Trendy &amp; Modern” / “Upgrade Your Home Today” / “Elevate Your Living Space”). The value proposition is interchangeable with any furniture URL. There is no city, showroom, offer, phone, or commercial incentive.</p>
-        <div class="callout">
-          <strong>Recommended fold</strong> <span class="pri pri-high">High</span>
-          <p class="quote" style="font-size:16px;">Columbia’s furniture showroom — shop in-store or delivered.</p>
-          <p>Sofas, bedroom sets, dining, mattresses (Sealy &amp; Tempur-Pedic). Synchrony financing. White-glove delivery available.</p>
-          <p style="margin:0;"><strong>[Shop living rooms] [Get pre-qualified] [Get directions — 3010 Two Notch Rd]</strong></p>
+      <h2>Technical improvements</h2>
+      <div class="cols">
+        <div>
+          <ul>
+            <li>GA4 + Google Ads + Meta pixel: purchase, begin_checkout, add_to_cart, generate_lead, phone_call, directions.</li>
+            <li>Klaviyo (or Shopify Email): abandoned cart/checkout, browse on PDPs over $500, Day 10 review ask.</li>
+            <li>Shopify Search &amp; Discovery: couch→sofa synonyms; filters for size, color, material, brand; hide sofa tables from sofa search.</li>
+            <li>One shipping policy. The page version mentions white glove; /policies does not. FAQ says 3–7 days; policy says 7–14.</li>
+          </ul>
         </div>
-
-        <h3>Value proposition</h3>
-        <p>The site never answers the three questions furniture shoppers ask in the first five seconds:</p>
-        <ol>
-          <li><strong>Is this a real store I can visit?</strong> Yes — but you hide it.</li>
-          <li><strong>Do you deliver / assemble / finance?</strong> Partly — scattered across FAQ and a second shipping page.</li>
-          <li><strong>Why not Ashley or Wayfair?</strong> 30+ years, local showroom, brand mattresses, Synchrony, white glove — none of this is packaged.</li>
-        </ol>
-        <p>“Modern • Stylish • Built to Last” and “Top-tier quality” are adjectives, not a proposition. Test: <em>Midlands furniture showroom with nationwide shipping</em>, proved by Sealy/Tempur, ACME/Foagroup breadth, Synchrony, and local white glove. Offer free local delivery over $X or as low as $XX/month.</p>
-
-        <h3>CTA placement</h3>
-        <table>
-          <thead><tr><th>Location</th><th>Current CTA</th><th>Issue</th><th>Priority</th></tr></thead>
-          <tbody>
-            <tr><td>Announcement bar</td><td>Shop Now / Pay over Time</td><td>“Shop Now” is vague; financing is the better CTA</td><td><span class="pri pri-high">High</span></td></tr>
-            <tr><td>Hero</td><td>Weak / slogan-led</td><td>Needs Shop + Visit / Finance</td><td><span class="pri pri-high">High</span></td></tr>
-            <tr><td>Category tiles</td><td>Implicit click</td><td>Keep, but fix “Dinning”</td><td><span class="pri pri-high">High</span></td></tr>
-            <tr><td>Product cards</td><td>Add to cart</td><td>Dangerous on $2,000+ items with no dimensions</td><td><span class="pri pri-med">Medium</span></td></tr>
-            <tr><td>PDP sticky</td><td>Add to cart</td><td>No financing, call, or “see in store”</td><td><span class="pri pri-high">High</span></td></tr>
-            <tr><td>FAQ</td><td>Phone / email</td><td>Good, but duplicated</td><td><span class="pri pri-low">Low</span></td></tr>
-            <tr><td>Footer</td><td>Phone only</td><td>No map, hours, or review stars</td><td><span class="pri pri-high">High</span></td></tr>
-          </tbody>
-        </table>
-        <p>Add sitewide: sticky mobile <strong>Call 803-500-0101 | Get directions</strong>. PDP: Add to cart + Check monthly payment + See it in our Columbia showroom. Cart: Shop Pay + Apply for Synchrony + estimated delivery.</p>
-
-        <h3>Promotions / offers</h3>
-        <p>There is no current merchandising offer: no sale event, delivery threshold, 0% term, mattress promo, or weekend event. Furniture conversion is offer-driven. Ashley, Rooms To Go, and Havertys always have a reason to buy this week.</p>
-        <ul>
-          <li><span class="pri pri-high">High</span> Free local delivery (Richland / Lexington County) over $999 or $1,499</li>
-          <li><span class="pri pri-high">High</span> Synchrony: 0% for 6/12 months on $999+ (only advertise terms you actually have)</li>
-          <li><span class="pri pri-med">Medium</span> Mattress bundle: free foundation or free local delivery with Sealy/Tempur</li>
-          <li><span class="pri pri-med">Medium</span> Showroom-only extra % off in-stock floor samples</li>
-          <li><span class="pri pri-med">Medium</span> Youth/bunk week — you have 217 bunk beds, a real assortment advantage</li>
-        </ul>
-
-        <h3>Trust badges, reviews, navigation</h3>
-        <p>Footer badges are generic. Display payment logos you already accept, Synchrony, authorized Sealy/Tempur marks if true, Google rating, white-glove delivery, and warranty. Do not keep unverified “Loved by Customers” quotes as primary social proof.</p>
-        <p><strong>What works:</strong> room-based mega menu. <strong>What is broken:</strong> “Dinning” typo; youth handles like <code>dresser-1233</code>, <code>mirror-1-old</code>; two FAQ blocks covering the same questions; brand FAQ pasted twice; Luxury Bedroom has 0 products; living merchandising shows sofa tables next to sofas; prices render as <code>$3,112.50 /</code>; empty <code>/collections/all</code>.</p>
-
-        <h2>3.2 Customer journey</h2>
-        <div class="grid-3">
-          <div class="card"><h3>Knows the room</h3><p><strong>Fair.</strong> Homepage → Living → Sofas can work.</p></div>
-          <div class="card"><h3>Has a specific need</h3><p><strong>Poor.</strong> Search, filters, and tagging fail them.</p></div>
-          <div class="card"><h3>Wants to visit</h3><p><strong>Very poor.</strong> Store is almost invisible.</p></div>
+        <div>
+          <ul>
+            <li>Merchant Center for 150–300 SKUs only: unique titles, GTINs/MPNs, product_type, custom labels (showroom / mattress / youth / margin).</li>
+            <li>Related products: beds↔nightstands, sofas↔ottomans, mattresses↔foundations.</li>
+            <li>Call tracking numbers for ads vs organic vs GBP.</li>
+            <li>Install a review app. No Judge.me, Stamped, Loox, or Yotpo is on the PDPs today.</li>
+          </ul>
         </div>
-        <p>Unhappy paths that are more common than the happy path:</p>
+      </div>
+
+      <h2>Growth opportunities</h2>
+      <ul>
+        <li><strong>Showroom as the advantage.</strong> Wayfair cannot let someone sit on the sofa. Badge “on display at Two Notch.” Floor-sample weekends are yours alone.</li>
+        <li><strong>Youth / bunks.</strong> 217 bunk beds is deeper than most independents. Package bunk + mattress. Parents share that content.</li>
+        <li><strong>Mattress brands.</strong> Sealy and Tempur-Pedic against Ashley’s sleep shop — if dealer status is current, say so and put logos on the mattress PDPs.</li>
+        <li><strong>Glam / marble / chrome ACME.</strong> National sites push beige mid-century. That look is underserved in Columbia if you merchandise it as rooms, not SKUs.</li>
+        <li><strong>Two modes later:</strong> local (pickup, white glove, financing) and national (only SKUs with photos, dimensions, and freight that can make money). Not 6,600 items on the homepage.</li>
+      </ul>
+      <p>If Synchrony decline rate is high, Kimbrell’s will keep taking those households. A second lender is a commercial decision, not a theme task.</p>
+      <div class="foot"><span>Big City Furniture · Growth Audit</span><span>4 / 5</span></div>
+    </section>
+
+    <!-- PAGE 5 -->
+    <section class="sheet">
+      <div class="kicker">Next 45 days</div>
+      <h1 style="font-size:22px;">Implementation roadmap</h1>
+      <p>Goal for this window: more showroom visits, more phone leads, and a storefront that can take an ecommerce order without surprises. Paid media stays local until the feed and tracking are clean.</p>
+
+      <div class="week">
+        <h3><span class="num">Week 1</span> — Tracking, blockers, GBP</h3>
         <ul>
-          <li>Search “sofa” → <strong>1,000 results</strong> (Shopify cap), including irrelevant items</li>
-          <li>Sofas collection includes sofa <strong>tables</strong> because products are tagged Sofa</li>
-          <li><code>/collections/all</code> → “0 products / No products found”</li>
-          <li>Bed Frames and Luxury Bedroom → 0 products</li>
-          <li>Contact → placeholder copy, no address, map, or hours</li>
-          <li>Want dimensions / fabric / delivery price → not on the PDP → bounce</li>
+          <li>Confirm GA4, Google Ads tag, Meta pixel, and enhanced conversions. Add call and direction events. Test a purchase and a call.</li>
+          <li>Contact, About, placeholders, typos (Dinning, SIze), Terms domain, single hours line.</li>
+          <li>Unpublish empty/Copy collections. Fix /collections/all. Footer NAP + schema.</li>
+          <li>Verify Google Business Profile at 3010 Two Notch. Upload photos. Seed Q&amp;A. Put a review QR at the register.</li>
         </ul>
+      </div>
 
-        <h3>Category structure — 123 collections</h3>
-        <table>
-          <thead><tr><th>Issue</th><th>Examples</th><th>Why it hurts</th></tr></thead>
-          <tbody>
-            <tr><td>Empty collections</td><td>All (0), Bed Frames, Luxury Bedroom, Stationary Sets, Chairs (Copy)</td><td>Dead ends, wasted crawl, bad ad landers</td></tr>
-            <tr><td>Duplicate titles</td><td>Benches, Chairs, Desks, Home Decor (2 each)</td><td>Split ranking, confused merchandising</td></tr>
-            <tr><td>Leftover “Copy”</td><td>chairs-copy, counter-ht-table-copy, living-room-set-copy</td><td>Looks unfinished; duplicate URLs</td></tr>
-            <tr><td>Dirty handles</td><td>dresser-1233, mirror-1-old, nightstand-old, dalyn-impact</td><td>Internal debt; poor SEO URLs</td></tr>
-            <tr><td>Tag contamination</td><td>Sofas includes Zander / Zasir / Uchenna Sofa Tables</td><td>Shoppers lose trust in category quality</td></tr>
-            <tr><td>SEO empty</td><td>122/123 collections have no description; 73 have no image</td><td>Cannot rank “leather sofas” or local variants</td></tr>
-            <tr><td>Oversized catch-alls</td><td>All Products 6,628 · Upholstery 1,792 · Contemporary 1,355 · Chairs 959</td><td>Unshoppable without serious filters</td></tr>
-          </tbody>
-        </table>
-        <div class="tree">
-          <strong>Target architecture</strong><br>
-          Living Room — Sofas · Sectionals · Loveseats · Recliners · Chairs · Occasional Tables · TV Consoles<br>
-          Bedroom — Sets · Beds by size · Dressers · Nightstands · Chests · Mattresses<br>
-          Dining — Sets by piece count · Tables · Chairs · Counter Height · Bar<br>
-          Youth — Bunk Beds · Kids Beds · Daybeds · Dressers · Desks<br>
-          Outdoor · Office · Home Decor · Lighting · Sale / In-Stock<br>
-          Shop by style only if tagged accurately: Modern · Traditional · Glam · Farmhouse
-        </div>
-        <p>Unpublish every empty, copy, and duplicate collection this month. Treat room landing pages as SEO + merchandising hubs, not pretty headers. Several (<code>dining</code>, <code>living</code>, <code>outdoor</code>, <code>youth</code>, <code>financing</code>) are empty or theme-only in the CMS.</p>
-
-        <h3>Search, discovery, mobile</h3>
-        <p>Predictive search returns products, but titles look like <code>SANDBACH - Sofa - FM6013LG-SF-M</code>. Filters are Availability + Price only. Missing: color, material, seating capacity, bed size, style, brand, in-stock for pickup. Configure Shopify Search &amp; Discovery (or Algolia) with synonyms (couch/sofa), hide sofa tables from sofa search, and boost in-stock items with dimensions and reviews.</p>
-        <p>Discovery modules furniture sites live on are missing: “Complete the set” is hardcoded “No related products available.” Recently viewed shows theme placeholder copy. No customers-also-bought, no “on our Columbia floor,” no shop-the-look. Compare exists — keep it, but it is not a discovery engine.</p>
-        <p>Mobile: hero + announcement consume the first screen with no offer or store CTA. Sticky ATC exists but omits financing/call. Click-to-call is not treated as a primary conversion, though many furniture tickets still close on the phone.</p>
-
-        <h3>Friction likely reducing conversions</h3>
-        <ol>
-          <li>Unknown shipping cost on expensive items</li>
-          <li>No dimensions / “will it fit” guidance</li>
-          <li>SKU-heavy titles that do not match how people search</li>
-          <li>2-day return window + restocking fee</li>
-          <li>Hours and delivery-time contradictions</li>
-          <li>Financing appears in-store-only after approval</li>
-          <li>Empty related products / placeholders</li>
-          <li>Contact page looks unfinished</li>
-          <li>No local pickup path</li>
-          <li>Reviews cannot be verified</li>
-          <li><code>/collections/all</code> zero-product dead end</li>
-          <li>Mattress homepage range ($899–$1,399) does not match PDP default ($999 Queen on Paterson II)</li>
-        </ol>
-
-        <h2>3.3 Product page CRO</h2>
-        <p>Representative PDPs reviewed: <strong>Safi Sofa LV00216</strong> ($2,350, ACME) and <strong>Paterson II Tight Top Ultra Firm</strong> (Sealy).</p>
-
-        <h3>Images</h3>
-        <p>Typical ACME items have 4–10 images — enough quantity, not enough selling. Missing versus converting furniture sites: lifestyle photography, scale reference, fabric close-ups, dimension overlays, video, floor-sample photos, and an “On display now” badge. Mattress pages are closer to usable because Sealy provides marketing copy. Upholstery pages look like a dealer portal.</p>
-        <div class="callout"><span class="pri pri-med">Medium</span> <strong>90-day photo plan:</strong> shoot 20 showroom vignettes and attach them to matching SKUs. Even 50 SKUs with real photos will outperform 6,000 white-background SKUs in ads and on-site conversion.</div>
-
-        <h3>Descriptions &amp; pricing</h3>
-        <div class="callout alert"><span class="pri pri-high">High</span> Safi Sofa description, in full: “Foam Density: D28.” That is also the meta description Google will show.</div>
-        <p>Other ACME examples are wholesale spec dumps (“Kd Legs”, “Table Top Thickness: 18mm”). These do not sell and fail SEO. Template for every hero SKU: 2-sentence shopper intro; spec table (W × D × H, seat height/depth, weight, materials, color, assembly); “fits a ___ room”; care/warranty; delivery method; financing line; “See this collection at 3010 Two Notch Road.” Do not put the SKU in the H1. Use <strong>Safi Leather Sofa</strong> and keep LV00216 as SKU/MPN.</p>
+      <div class="week">
+        <h3><span class="num">Week 2</span> — Homepage, PDPs, trust, navigation, SEO</h3>
         <ul>
-          <li>Many prices end in <strong>.50</strong> ($3,112.50, $822.50). Round hero SKUs to $X9 or $X99.</li>
-          <li>Set cards show $150.00 – $1,617.00 (e.g. FARSUND 4-pc). Show “Starting at” with the complete-set price emphasized.</li>
-          <li>No monthly-payment display next to a $2,350 sofa. That is mandatory.</li>
-          <li>Only show compare-at when true — do not fake MAP violations.</li>
+          <li>New homepage fold: Columbia, two CTAs, real offer. Remove unverified quotes or replace with Google stars.</li>
+          <li>PDP template on the top 50–100 SKUs: human titles, dimensions, delivery, financing, related items.</li>
+          <li>Retag sofas vs tables. Collection descriptions on Sofas, Sectionals, Bedroom, Dining, Mattresses, Bunks.</li>
+          <li>Cart: ZIP estimate and pickup. Search filters if Search &amp; Discovery is available.</li>
+          <li>Showroom landing page. Klaviyo flows live.</li>
         </ul>
+      </div>
 
-        <h3>Financing, reviews, delivery, add-to-cart</h3>
-        <p>The Financing page says approved customers receive a temporary account number they can <strong>use to shop in-store</strong>. Online shoppers who pre-qualify are told to drive to Columbia. If Synchrony can be used online, put it on the PDP. If not, use Shop Pay Installments / PayPal Pay in 4 online and Synchrony as the showroom closer — and say so.</p>
-        <p>No Judge.me / Stamped / Loox / Yotpo / Okendo detected. Product schema has no aggregateRating. Furniture conversion without reviews is possible in a showroom and very hard online at $1,000–$4,000. Install a review app and auto-request 10–14 days after delivery. Never buy fake reviews.</p>
-        <p>PDP line today: <strong>“Shipping calculated at checkout.”</strong> For furniture, that sentence is a bounce. You already have a fuller story on /pages/shipping-policy (white glove vs LTL vs parcel). A second policy at /policies/shipping-policy does not mention white glove. Two policies, two timelines (FAQ 3–7 days vs policy 7–14). Put a delivery module on every PDP: local white glove, statewide SC, national freight, measure-your-space, adult must be present.</p>
-        <p>Hide quantity and “Default Title” when there is one option. Fix mattress label <strong>“SIze.”</strong> Add inventory honesty (ships 3–7 days vs special order 4–8 weeks). Related products empty means AOV add-ons never appear.</p>
-
-        <h3>Missing PDP elements</h3>
-        <div class="rec"><div><span class="pri pri-high">High</span></div><div><p>Dimensions + fit guide; ZIP delivery estimator; monthly payment; reviews; related / complete-the-set.</p></div></div>
-        <div class="rec"><div><span class="pri pri-med">Medium</span></div><div><p>“On display in Columbia” badge; warranty + damage window (FAQ 48 hours vs policy “as soon as possible” — pick one); fabric/color disclaimer; protection plan if you sell one.</p></div></div>
-        <div class="rec"><div><span class="pri pri-low">Low</span></div><div><p>Video or showroom photo; breadcrumbs that match room IA; leftover theme-string removal (bundled with hygiene).</p></div></div>
-
-        <h2>3.4 Checkout &amp; conversion</h2>
-        <p>Shopify checkout (Shop Pay, Apple Pay, Google Pay) is usually fine. The leaks are before checkout and in the policies next to it.</p>
+      <div class="week">
+        <h3><span class="num">Weeks 3–4</span> — Ads, remarketing, local pages</h3>
         <ul>
-          <li>Shipping cost and method appear too late</li>
-          <li>No pickup-in-store option (huge for a Two Notch showroom)</li>
-          <li>Financing is not a checkout payment method based on Financing page copy</li>
-          <li>Cart is generic — weak trust stack</li>
-          <li>High-ticket carts feel like fashion checkout, not furniture (no access questions / appointment)</li>
+          <li>Google: brand + local search (store, sofas, bedroom, mattress, bunks, financing). Call extensions. Negatives for jobs, used, DIY, rental.</li>
+          <li>Shopping only after 150 SKUs have clean titles and GTINs/MPNs. No full-catalog dump.</li>
+          <li>Remarketing lists: site visitors, PDP viewers, cart. Furniture cycle is 1–6 weeks — budget for that.</li>
+          <li>Meta: Columbia geo, showroom Reels, PDP retargeting. $30–50/day is enough to learn.</li>
+          <li>Local pages: mattresses, bunks, financing, Lexington/Irmo. GBP posts weekly. Keep asking for reviews.</li>
         </ul>
-        <h3>Likely abandonment reasons on this site</h3>
-        <ol>
-          <li>Freight shock at checkout</li>
-          <li>“Can I return this?” → 2 days + 15–20% restocking</li>
-          <li>Leather / size unanswered</li>
-          <li>Unsure if the store is real</li>
-          <li>Want to finance and cannot finish online</li>
-          <li>Delivery date unknown</li>
-          <li>Mattress non-returnable with no trial</li>
-          <li>Phone hours conflict; Sunday closed and not obvious</li>
-          <li>Need spouse approval — no email/SMS reminder (no Klaviyo detected)</li>
-          <li>Ashley/RTG show monthly price and free delivery thresholds</li>
-        </ol>
-        <p>Industry furniture abandonment is already 70–85%. This site adds extra, avoidable reasons.</p>
-        <div class="callout alert">
-          <span class="pri pri-high">High</span> Terms still say customers visit <strong>BigCityFurniture.com</strong> — wrong domain. Live domain is bigcityfurniturestore.com. Return window is far outside US furniture norms (typically 14–30 days for stocked items). Align damage policy (FAQ 48 hours vs refund policy). Explain Glory Movement LLC in one line on About so charge descriptors do not scare people.
-        </div>
-        <p><strong>Do now:</strong> cart ZIP estimate, local pickup, payment icons, confirmation with delivery window and damage instructions, Klaviyo abandoned cart/checkout. <strong>Owner decisions:</strong> 14-day return request on stocked furniture; mattress trial honesty before add-to-cart; one shipping policy; one hours line including Sunday Closed.</p>
-      </section>
+      </div>
 
-      <section id="local">
-        <div class="eyebrow">Section 04</div>
-        <h1 class="sec">Local SEO &amp; Google Business Profile</h1>
-        <p class="lede">Columbia is a competitive furniture market. You will not out-brand Ashley on “furniture store Columbia SC” in 30 days. You can win Two Notch / Northeast Columbia / Forest Acres / Dentsville and long tails such as bunk beds, Tempur-Pedic, and financing.</p>
-
-        <h2>Local competitors within a short drive</h2>
+      <div class="week">
+        <h3><span class="num">Weeks 5–6</span> — Read the data, then scale</h3>
         <ul>
-          <li><strong>Ashley</strong> — Harbison (recently renovated ~44,000 sq ft + outlet + sleep shop), Forest Drive, Forum Drive</li>
-          <li><strong>Rooms To Go</strong> — Harbison and Forum Drive</li>
-          <li><strong>Havertys</strong> — Harbison / Columbiana</li>
-          <li><strong>Kimbrell’s</strong> — West Columbia, in-house financing</li>
-          <li><strong>RM Storehouse</strong> — Broad River Rd, local-curated positioning</li>
-          <li><strong>Furniture Barn, Wes Bolick Bedrooms, Casual Living, Buddy’s, Atlantic Bedding</strong> — including others on Two Notch Road</li>
+          <li>Pause search terms and SKUs that spend without calls or sales. Raise bids on queries that drive directions and phone leads.</li>
+          <li>Compare PDP add-to-cart on the cleaned 50 vs the rest of the catalog. Double down on what moved.</li>
+          <li>Tighten the journey: related products, announcement offer, delivery copy on every hero SKU.</li>
+          <li>Scale only winners — local keywords, showroom creative, and SKUs with photos and dimensions. Leave PMax and national Shopping for after this sprint.</li>
         </ul>
+      </div>
 
-        <h2>Why the site cannot rank locally yet</h2>
-        <ul>
-          <li>Homepage title: “Big City Furniture” — no city, no category</li>
-          <li>Homepage meta description: <strong>missing</strong></li>
-          <li>OG description: “Big City Furniture”</li>
-          <li>Schema: Organization + WebSite only — <strong>no LocalBusiness / FurnitureStore</strong></li>
-          <li>Address is on About and policies, not in the footer or homepage H1</li>
-          <li>No embedded map, parking notes, or “serving Columbia, Lexington, Irmo…”</li>
-          <li>Empty blog; citation conflict at 9005 Two Notch Rd #0184</li>
-        </ul>
+      <table>
+        <thead><tr><th>Watch</th><th>Target by day 45</th></tr></thead>
+        <tbody>
+          <tr><td>GBP calls + direction clicks</td><td>Tracked weekly; trending up</td></tr>
+          <tr><td>Google reviews</td><td>+8 to 12 new, replies within 48 hours</td></tr>
+          <tr><td>Phone calls from site and ads</td><td>Every call attributed to a source</td></tr>
+          <tr><td>Hero PDP add-to-cart</td><td>Up vs pre-change baseline</td></tr>
+          <tr><td>Checkout with shipping shown before pay</td><td>100% of carts</td></tr>
+        </tbody>
+      </table>
+      <p class="meta" style="margin-top:8px;">Based on the public storefront, Shopify catalog/schema, and local market as of 14 August 2026. Admin analytics, Merchant Center, and GBP backend were not available. Connecting those will refine spend, not the sequence.</p>
+      <div class="foot"><span>Big City Furniture · Growth Audit</span><span>5 / 5</span></div>
+    </section>
 
-        <h3>Website local fixes</h3>
-        <div class="rec"><div><span class="pri pri-high">High</span></div><div><p>Footer NAP on every page (name, 3010 Two Notch Road, Columbia, SC 29204, 803-500-0101, hours). FurnitureStore JSON-LD with geo, hours, phone, sameAs. Homepage H1 that includes Columbia, SC.</p></div></div>
-        <div class="rec"><div><span class="pri pri-high">High</span></div><div><p>Unique store page: /pages/columbia-sc-showroom with photos, map, parking, brands, financing, directions from I-20 / Two Notch / Fort Jackson.</p></div></div>
-        <div class="rec"><div><span class="pri pri-med">Medium</span></div><div><p>City/service pages below. Fix domain references and hours. Ask Google to recrawl after NAP is consistent.</p></div></div>
-
-        <h2>Keyword opportunities</h2>
-        <table>
-          <thead><tr><th>Type</th><th>Examples</th></tr></thead>
-          <tbody>
-            <tr><td>Core</td><td>furniture store Columbia SC, furniture stores near me, furniture Columbia SC</td></tr>
-            <tr><td>Corridor</td><td>furniture store Two Notch Road, furniture Northeast Columbia, furniture Dentsville</td></tr>
-            <tr><td>Product + city</td><td>sofas Columbia SC, sectional sofa Columbia, bedroom sets Columbia SC, dining room sets Columbia, bunk beds Columbia SC, mattress store Columbia SC</td></tr>
-            <tr><td>Brand + city</td><td>Tempur-Pedic Columbia, Sealy mattress Columbia SC, ACME furniture Columbia</td></tr>
-            <tr><td>Intent</td><td>furniture financing Columbia SC, furniture delivery Columbia SC, white glove furniture delivery Columbia</td></tr>
-            <tr><td>Nearby cities</td><td>furniture Lexington SC, furniture Irmo, furniture West Columbia, furniture Blythewood, furniture Elgin SC</td></tr>
-          </tbody>
-        </table>
-        <p>National ecommerce keywords (sectional sofa, queen bedroom set, 7-piece dining set, bunk bed with storage) only after titles/feed cleanup. Do not target “cheap furniture” if the assortment is $800–$3,000 ACME glam. Match glam / chrome / marble / youth bunks / complete dining sets.</p>
-
-        <h2>Local landing pages</h2>
-        <p>Create unique 500–800 word pages with real photos, FAQ, product modules, and a map. End each with Get directions and Shop this category.</p>
-        <ol>
-          <li>Columbia, SC Furniture Showroom (hub)</li>
-          <li>Sofas &amp; Sectionals in Columbia</li>
-          <li>Bedroom Furniture Columbia SC</li>
-          <li>Mattresses — Sealy &amp; Tempur-Pedic in Columbia</li>
-          <li>Bunk Beds &amp; Youth Furniture (217 bunks — unusual depth)</li>
-          <li>Dining Sets Columbia SC</li>
-          <li>Furniture Financing in Columbia (Synchrony)</li>
-          <li>Furniture Delivery &amp; White Glove — Midlands</li>
-          <li>Lexington, Irmo, West Columbia, Cayce, Forest Acres, Elgin, Blythewood</li>
-          <li>Fort Jackson / PCS incoming families — “furnish your home fast”</li>
-        </ol>
-
-        <h2>Google Business Profile checklist</h2>
-        <p>If the profile is unverified, incomplete, or sitting on the wrong address (9005 vs 3010), this is the highest-ROI local action in the first 14 days. Confirm 3010 Two Notch is the public showroom before submitting documents.</p>
-        <ul>
-          <li>Primary category: Furniture store. Secondary: Mattress store / Interior store only if accurate</li>
-          <li>Hours matching the site, including Sunday Closed; phone 803-500-0101</li>
-          <li>Website + financing link; UTM <code>?utm_source=google&amp;utm_medium=organic&amp;utm_campaign=gbp</code></li>
-          <li>10+ products with photos and prices; 15+ showroom photos, 5 exterior, 5 team/delivery</li>
-          <li>Cover photo: storefront with readable signage</li>
-          <li>Weekly Google Posts; seed 8 Q&amp;As (parking, financing, delivery radius, mattress return, Sunday)</li>
-          <li>Messaging on, 1-hour reply SLA during store hours</li>
-          <li>Citation cleanup: Yelp, Apple Maps, Bing Places, Facebook, BBB, Data Axle, Chamber, FurnitureStoresUSA. Correct the 9005 listing if it is not you</li>
-        </ul>
-
-        <h2>Review generation</h2>
-        <p>You need Google reviews more than on-site testimonials. Process: text a Google review link after delivery/pickup; counter QR; ask only when the customer is happy; never pay for stars. Goal: <strong>8–12 new Google reviews per month</strong> until 50, then 4+/month. Reply in 48 hours. Klaviyo Day 10 review request; Day 45 accessories.</p>
-
-        <h2>Competitor openings</h2>
-        <table>
-          <thead><tr><th>Competitor</th><th>Their strength</th><th>Your opening</th></tr></thead>
-          <tbody>
-            <tr><td>Ashley Harbison</td><td>Scale, renovation, mattress wall, ads</td><td>Personal help, youth/bunk depth, independent feel</td></tr>
-            <tr><td>Rooms To Go</td><td>Packages, financing, TV ads</td><td>ACME glam / marble chrome looks RTG does not own</td></tr>
-            <tr><td>Havertys</td><td>Quality perception, design help</td><td>Price ladder below Havertys with complete-room merchandising</td></tr>
-            <tr><td>Kimbrell’s</td><td>In-house / no-credit financing</td><td>If Synchrony declines, you lose this shopper — consider a second lender</td></tr>
-            <tr><td>RM Storehouse</td><td>Curated local brand</td><td>Assortment breadth and mattress brands</td></tr>
-            <tr><td>Two Notch independents</td><td>Convenience</td><td>Become the Two Notch destination with GBP photos + “on display today”</td></tr>
-          </tbody>
-        </table>
-        <p><strong>Military / Fort Jackson:</strong> PCS landing page and GBP posts around move-in season. National chains are slow; a local store that can deliver this week wins.</p>
-      </section>
-
-      <section id="google">
-        <div class="eyebrow">Section 05</div>
-        <h1 class="sec">Google Ads strategy</h1>
-        <div class="callout alert"><span class="pri pri-high">High</span> Do not turn on a full-catalog Shopping campaign tomorrow. The feed would advertise titles like <em>Chateau De Ville Sofa W/5 Pillows (Same LV01588) 58265</em> with description <em>Foam Density: D28</em>. That burns budget and can trigger Merchant Center issues.</div>
-
-        <h2>High-intent keywords (phased)</h2>
-        <h3>Phase 1 — Local, 25–35 miles around Columbia <span class="pri pri-high">High</span></h3>
-        <ul>
-          <li>furniture store Columbia SC</li>
-          <li>sofa store Columbia SC / sectional sofa Columbia</li>
-          <li>mattress store Columbia SC / Tempur-Pedic Columbia / Sealy Columbia</li>
-          <li>bedroom furniture Columbia SC · dining room sets Columbia SC · bunk beds Columbia SC</li>
-          <li>furniture financing Columbia SC · [brand] furniture near me</li>
-        </ul>
-        <h3>Phase 2 — Ecommerce, only cleaned SKUs <span class="pri pri-med">Medium</span></h3>
-        <ul>
-          <li>leather / velvet / power reclining sofa</li>
-          <li>queen or 4-piece bedroom set · 7-piece or counter-height dining set</li>
-          <li>twin bunk bed with storage · outdoor conversation set</li>
-        </ul>
-        <p><strong>Always-on brand:</strong> big city furniture, big city furniture Columbia, big city furniture store. <strong>Negatives:</strong> jobs, hiring, DIY, used, craigslist, rental, rent-to-own (unless wanted), wholesale, free, “how to build,” office cubicles, commercial office furniture.</p>
-
-        <h2>Campaign structure</h2>
-        <div class="tree">
-          A. Brand Search<br>
-          B. Local Search — Store visits (call + directions + “Columbia showroom”)<br>
-          C. Local Search — Product categories (Sofas, Bedroom, Dining, Mattress, Youth)<br>
-          D. Shopping — Priority SKUs only (first 150–300 cleaned products)<br>
-          E. Performance Max — after 30+ conversions / month, feed approved<br>
-          F. Remarketing Display / Demand Gen — site visitors 30–90 days<br>
-          G. Competitor conquest (optional, small): Ashley Columbia, Rooms To Go Columbia
-        </div>
-        <p>Use location bid modifiers for Columbia, Lexington, Irmo, West Columbia, Blythewood. Exclude far-away traffic you cannot profitably freight.</p>
-
-        <h2>Shopping ads — Merchant Center before spend</h2>
-        <ul>
-          <li>Title formula: Brand + Product Type + Material/Color + Size → <em>ACME Safi Leather Sofa – Dark Brown</em></li>
-          <li>Description: 500–1,000 unique characters, not foam-density only</li>
-          <li>GTIN if provided; otherwise MPN = SKU. identifier_exists = false only when true</li>
-          <li>product_type: Furniture &gt; Living Room &gt; Sofas</li>
-          <li>Custom labels: margin_high, in_stock_showroom, mattress, youth, price_bucket</li>
-          <li>Exclude empty image, no dimensions, duplicate copies, nonsense variant ranges until fixed</li>
-          <li>Price must match the PDP exactly</li>
-        </ul>
-        <p>Start Shopping on mattresses, bunks, complete dining sets, and 50 showroom sofas — not 6,628 SKUs.</p>
-
-        <h2>Remarketing &amp; tracking</h2>
-        <p>Furniture cycles are 7–45 days. Lists: all visitors, PDP viewers, cart, checkout, purchasers (exclude 180 days). Creative: the exact product + financing + free local delivery. YouTube/Demand Gen: showroom walkthrough, even iPhone footage. Without Klaviyo + Google tag events, this cannot run properly.</p>
-        <table>
-          <thead><tr><th>Event</th><th>Why</th></tr></thead>
-          <tbody>
-            <tr><td>purchase (value, tax, shipping)</td><td>Primary ecommerce</td></tr>
-            <tr><td>begin_checkout</td><td>Funnel</td></tr>
-            <tr><td>add_to_cart</td><td>Optimization (secondary)</td></tr>
-            <tr><td>generate_lead</td><td>Financing application, contact form</td></tr>
-            <tr><td>phone_call</td><td>Store is phone-heavy — a $3,000 sofa often closes on 803-500-0101</td></tr>
-            <tr><td>directions / GBP actions</td><td>Import GBP metrics</td></tr>
-            <tr><td>view_item with item_category</td><td>Feed PMax later</td></tr>
-          </tbody>
-        </table>
-        <p>Set primary conversion for local campaigns to calls + direction clicks + purchases, not add-to-cart. Call tracking is non-optional.</p>
-
-        <h2>Budget allocation (starting point)</h2>
-        <p>Test budget in the <strong>$3,000–$6,000 / month</strong> range; adjust to comfort. If the showroom is the profit center, skew harder to local search + GBP until online conversion is measured.</p>
-        <table>
-          <thead><tr><th>Campaign</th><th>Share</th><th>Role</th></tr></thead>
-          <tbody>
-            <tr><td>Local Search (categories + store)</td><td>35%</td><td>Visits + calls</td></tr>
-            <tr><td>Shopping (cleaned SKUs)</td><td>25%</td><td>Ecommerce</td></tr>
-            <tr><td>Brand</td><td>10%</td><td>Defend name</td></tr>
-            <tr><td>Remarketing</td><td>15%</td><td>Close long cycles</td></tr>
-            <tr><td>Experiment (PMax or Demand Gen)</td><td>15%</td><td>Only after tracking is clean</td></tr>
-          </tbody>
-        </table>
-        <p>Furniture CPCs often run $1.50–$8+ on generic sofas/mattresses. Bid to CPA against true AOV (likely $800–$2,500).</p>
-      </section>
-
-      <section id="meta">
-        <div class="eyebrow">Section 06</div>
-        <h1 class="sec">Meta Ads strategy</h1>
-        <p>Official profiles already in schema: facebook.com/bigcityfurniturestore and instagram.com/bigcityfurniturestore. Post showroom and delivery content, not only catalog PNGs.</p>
-
-        <h2>Campaign ideas</h2>
-        <ol>
-          <li><span class="pri pri-high">High</span> Local awareness / traffic — “Visit our Two Notch showroom this weekend.”</li>
-          <li><span class="pri pri-med">Medium</span> Catalog sales — Advantage+ Shopping or catalog retargeting on cleaned SKUs</li>
-          <li><span class="pri pri-high">High</span> Lead gen — Synchrony pre-qualify / get your monthly payment</li>
-          <li><span class="pri pri-med">Medium</span> Mattress — Sealy/Tempur education + local delivery</li>
-          <li><span class="pri pri-med">Medium</span> Life-event — new home / PCS / first-apartment youth bundles</li>
-          <li><span class="pri pri-low">Low</span> Room makeover UGC — customer photos or staff Reels walking the floor</li>
-        </ol>
-
-        <h2>Audience targeting</h2>
-        <p><strong>Geo:</strong> 15–25 miles around Columbia first (29204, 29223, 29229, 29212, 29072, 29063, 29169, 29016, 29045). Prospecting: home furnishings, interior design, moving, real estate, parenting, homeowners 25–54. Advantage+ broad often beats stacked interests — but only with a working pixel and 50+ weekly events. Until then, keep geo tight. Exclude recent buyers (180 days) and job seekers. Lookalikes once you have 200+ purchase events.</p>
-
-        <h2>Creative</h2>
-        <p>What will not work: ACME white-background carousel of 20 sofas with SKU titles. What will:</p>
-        <ul>
-          <li>iPhone Reel: walk in the front door on Two Notch, sit on 3 sofas, end on financing</li>
-          <li>Before/after of a Columbia living room</li>
-          <li>“$2,350 sofa · from $X/month” overlay</li>
-          <li>White-glove delivery timelapse; mattress lie-down; bunk-bed kids room</li>
-          <li>Staff expert: “3 sofas under $1,200 in the showroom today”</li>
-          <li>UGC-style: “We drove from Lexington…”</li>
-        </ul>
-        <p>Shoot 10 assets in one morning at the store. That content also feeds GBP and the homepage.</p>
-
-        <h2>Retargeting funnel</h2>
-        <div class="tree">
-          Day 0–3 &nbsp; Viewed PDP → that product + Shop Pay / “still in stock”<br>
-          Day 3–14 &nbsp; Viewed 2+ pages → category + financing<br>
-          Day 7–21 &nbsp; Added to cart → shipping/delivery reassurance + code only if needed<br>
-          Day 14–45 &nbsp; Viewed showroom page but no visit → directions / this weekend hours<br>
-          Purchasers → complementary items (pillows, nightstands) at 21–45 days
-        </div>
-        <p>Frequency-cap remarketing so you do not stalk people with a $3,000 sofa for 90 days.</p>
-
-        <h2>Offers that work for furniture customers</h2>
-        <ul>
-          <li>Free local delivery over a threshold</li>
-          <li>0% for X months (legal-compliant Synchrony terms only)</li>
-          <li>Floor-sample weekend — unique to the physical store; national sites cannot copy this</li>
-          <li>Mattress: free foundation or old-mattress removal</li>
-          <li>Dining: table + 6 chairs packaged price · Youth: bunk + mattress bundle</li>
-          <li>“Hold with $X deposit” for shoppers who need spouse approval</li>
-        </ul>
-        <p>Avoid sitewide 40% off on a catalog that already has .50 pricing — it trains discount seeking and can break MAP on Sealy/Tempur.</p>
-      </section>
-
-      <section id="market">
-        <div class="eyebrow">Section 07</div>
-        <h1 class="sec">Competitor &amp; market opportunities</h1>
-        <table>
-          <thead><tr><th>Capability</th><th>Wayfair / Article / Living Spaces</th><th>Ashley / RTG</th><th>Big City today</th></tr></thead>
-          <tbody>
-            <tr><td>Lifestyle photography</td><td>Strong</td><td>Strong</td><td>Catalog only</td></tr>
-            <tr><td>Filters</td><td>Strong</td><td>Strong</td><td>Price / availability</td></tr>
-            <tr><td>Delivery promise on PDP</td><td>Strong</td><td>Strong</td><td>“Calculated at checkout”</td></tr>
-            <tr><td>Reviews on product</td><td>Strong</td><td>Strong</td><td>None</td></tr>
-            <tr><td>Room packages</td><td>Strong</td><td>Core business</td><td>Broken related products</td></tr>
-            <tr><td>Financing as $/mo</td><td>Common</td><td>Core</td><td>Hidden on financing page</td></tr>
-            <tr><td>Local pickup</td><td>N/A or limited</td><td>Yes</td><td>Not surfaced</td></tr>
-            <tr><td>Store pages / GBP</td><td>N/A</td><td>Excellent</td><td>Weak</td></tr>
-            <tr><td>SEO landing pages</td><td>Thousands</td><td>Store pages</td><td>Thin / empty</td></tr>
-            <tr><td>Email / SMS</td><td>Mature</td><td>Mature</td><td>No Klaviyo detected</td></tr>
-            <tr><td>Return policy</td><td>Clear, often 30 days</td><td>Clear</td><td>2 days + restocking</td></tr>
-            <tr><td>Title hygiene</td><td>Shopper language</td><td>Shopper language</td><td>SKU + vendor code</td></tr>
-          </tbody>
-        </table>
-
-        <h2>Advantages you can actually own</h2>
-        <ol>
-          <li><strong>Showroom on Two Notch</strong> — sit, feel fabric, take it home or schedule white glove. Wayfair cannot do this.</li>
-          <li><strong>Assortment depth</strong> — 6,628 SKUs, 217 bunks, 627 dining sets, Sealy + Tempur.</li>
-          <li><strong>Glam / marble / chrome ACME looks</strong> that national “mid-century beige” brands under-serve in Columbia.</li>
-          <li><strong>Independence</strong> — design help without Harbison mall energy, if you staff it that way.</li>
-          <li><strong>Military / Midlands delivery</strong> — faster than national freight for local ZIPs.</li>
-        </ol>
-        <div class="callout idea">
-          <p class="quote">12-month brand idea: “The Two Notch furniture showroom with the big catalog — try it in Columbia, finance it today, deliver it right.”</p>
-          <p style="margin:0;">150 hero SKUs merchandised like a DTC brand. The rest of the catalog available but not dumped on the homepage. Inventory flags: On display / Ship from warehouse / Special order. Ads send nearby shoppers to the store and distant shoppers to cleaned PDPs only.</p>
-        </div>
-      </section>
-
-      <section id="plan">
-        <div class="eyebrow">Section 08</div>
-        <h1 class="sec">90-day action plan</h1>
-        <p class="lede">Quick wins are mostly Shopify admin, copy, and GBP. No theme rebuild required for the first month.</p>
-
-        <h2>Quick wins — 0–30 days</h2>
-        <h3>Trust and hygiene</h3>
-        <div class="rec"><div><span class="pri pri-high">High</span></div><div><p><strong>1–2.</strong> Rewrite Contact; remove Shopify placeholder; add map, hours, address, click-to-call. Fix About Us copy and repeating email/phone blocks.</p></div></div>
-        <div class="rec"><div><span class="pri pri-high">High</span></div><div><p><strong>3–5.</strong> Fix Dinning → Dining and SIze → Size. Remove “Describe your recently viewed products here.” Replace unverified homepage testimonials with Google rating if available.</p></div></div>
-        <div class="rec"><div><span class="pri pri-high">High</span></div><div><p><strong>6–8.</strong> One hours policy everywhere. Fix Terms domain to bigcityfurniturestore.com. Footer NAP + payment icons + Synchrony + “Serving Columbia, SC since [year].”</p></div></div>
-        <h3>IA / SEO</h3>
-        <div class="rec"><div><span class="pri pri-high">High</span></div><div><p><strong>9–12.</strong> Point All products to /collections/all-products (6,628 items). Unpublish /collections/all and empty/Copy collections. Homepage title/meta with Columbia + category. FurnitureStore schema.</p></div></div>
-        <div class="rec"><div><span class="pri pri-med">Medium</span></div><div><p><strong>13.</strong> Write 150-word descriptions for the top 15 collections (Sofas, Sectionals, Bedroom, Dining Sets, Mattresses, Bunk Beds, etc.).</p></div></div>
-        <h3>Conversion</h3>
-        <div class="rec"><div><span class="pri pri-high">High</span></div><div><p><strong>14–18.</strong> PDP module: dimensions for top 100 SKUs, delivery explainer, financing CTA. Hide quantity / Default Title. Related products. Real announcement-bar offer. Cart ZIP estimate + call link.</p></div></div>
-        <div class="rec"><div><span class="pri pri-high">High</span></div><div><p><strong>19–20.</strong> Enable local pickup if inventory allows. Install Klaviyo (or Shopify Email) + Google/Meta pixels (purchase, ATC, begin_checkout, call click).</p></div></div>
-        <h3>Local</h3>
-        <div class="rec"><div><span class="pri pri-high">High</span></div><div><p><strong>21–25.</strong> Claim/verify GBP at the correct address. Upload 20 showroom photos. Review QR + post-purchase text. Reply to reviews; seed Q&amp;A. NAP citations; flag 9005 Two Notch if inaccurate.</p></div></div>
-
-        <h2>Medium-term — 30–90 days</h2>
-        <div class="rec"><div><span class="pri pri-high">High</span></div><div><p><strong>26–28.</strong> Retag sofas vs sofa tables. Search &amp; Discovery filters (size, color, material, brand, style, in-stock). Hero catalog of 150 SKUs: human titles, 150+ word copy, spec tables, rounded prices.</p></div></div>
-        <div class="rec"><div><span class="pri pri-med">Medium</span></div><div><p><strong>29–34.</strong> 20-vignette photo shoot. Room landing pages. Single shipping policy + ZIP delivery. Review app. Return policy you can defend in ads. Honest financing split + monthly price on PDPs.</p></div></div>
-        <div class="rec"><div><span class="pri pri-med">Medium</span></div><div><p><strong>35–39.</strong> Merchant Center feed for 150–300 SKUs; launch Shopping + local search. Meta catalog + local Reels at $30–50/day. Staff review playbook. Mattress PDP price alignment. Call tracking numbers for Ads vs Organic vs GBP.</p></div></div>
-
-        <h2>Long-term — 90 days+</h2>
-        <div class="rec"><div><span class="pri pri-low">Low</span></div><div><p><strong>40–44.</strong> Two storefronts in one: local mode (showroom, pickup, white glove, financing, mattresses) and national mode (only SKUs with freight economics, dimensions, photos). 50+ SEO pages. Email/SMS lifecycle. Weekly floor-walk Reels. Inventory badges for long-lead orders.</p></div></div>
-        <div class="rec"><div><span class="pri pri-low">Low</span></div><div><p><strong>45–50.</strong> Trade/staging program. Second lender if Synchrony declines are high. 100+ Google reviews at 4.6★+. PMax/national Shopping only after local CPA is stable. 3D/AR after photography. Midlands expansion (Lexington, Irmo, Sumter, Orangeburg) before a national brand play.</p></div></div>
-
-        <h2>90-day KPI scorecard</h2>
-        <table>
-          <thead><tr><th>KPI</th><th>Why it matters</th><th>Direction</th></tr></thead>
-          <tbody>
-            <tr><td>GBP views, calls, direction clicks</td><td>Local store growth</td><td class="kpi">Up</td></tr>
-            <tr><td>Google review count / rating</td><td>Local pack</td><td class="kpi">50+ reviews</td></tr>
-            <tr><td>Homepage → collection CTR</td><td>Hero/nav clarity</td><td class="kpi">Up</td></tr>
-            <tr><td>Search exit rate / zero-result searches</td><td>IA and search</td><td class="down">Down</td></tr>
-            <tr><td>PDP add-to-cart on hero 150 SKUs</td><td>PDP quality</td><td class="kpi">Up</td></tr>
-            <tr><td>Checkout start → purchase</td><td>Shipping/policy friction</td><td class="kpi">Up</td></tr>
-            <tr><td>Average order value</td><td>Related products + financing</td><td class="kpi">Up</td></tr>
-            <tr><td>% of orders with shipping shown before checkout</td><td>Transparency</td><td class="kpi">100%</td></tr>
-            <tr><td>Phone calls from site + ads</td><td>Furniture closing path</td><td class="kpi">Tracked</td></tr>
-            <tr><td>Google Ads CPA (local) vs showroom close rate</td><td>Paid efficiency</td><td>Measure, then scale</td></tr>
-            <tr><td>Email captured</td><td>Remarketing</td><td class="kpi">List growth</td></tr>
-            <tr><td>Refund / chargeback rate</td><td>Policy + description accuracy</td><td>Watch as returns loosen</td></tr>
-          </tbody>
-        </table>
-
-        <h2>Shopify implementation order</h2>
-        <ol>
-          <li>Contact + About + placeholder removal</li>
-          <li>Footer NAP + LocalBusiness schema + homepage SEO fields</li>
-          <li>Unpublish bad collections; fix All</li>
-          <li>PDP template: specs, delivery, financing, hide Default Title</li>
-          <li>Related products + recently viewed</li>
-          <li>Cart ZIP / pickup</li>
-          <li>Search &amp; Discovery filters</li>
-          <li>Pixel + Klaviyo</li>
-          <li>Merchant Center feed columns (title, description, MPN, product_type, custom labels)</li>
-        </ol>
-        <p>Photography, GBP, reviews, and policy decisions need the store owner — they cannot be theme-only.</p>
-
-        <h2>Appendix A — Pages audited</h2>
-        <ul>
-          <li>/ homepage</li>
-          <li>/pages/about-us, /pages/about-us-1 (empty duplicate)</li>
-          <li>/pages/contact (placeholder)</li>
-          <li>/pages/financing · /pages/bedroom · /pages/living · /pages/shipping-policy</li>
-          <li>/policies/shipping-policy · /policies/refund-policy · /pages/terms-and-conditions</li>
-          <li>/collections/all (0 products) · /collections/all-products (~6,628) · /collections/sofa (263, contaminated with tables)</li>
-          <li>/products/safi-sofa-lv00216 · /products/paterson-ii-tight-top-ultra-firm</li>
-          <li>/search?q=sofa (1,000 results) · /blogs/news (empty)</li>
-          <li>robots.txt / sitemap.xml (11 child sitemaps; ~6,625 product URLs)</li>
-        </ul>
-        <h2>Appendix B — Collection debt to unpublish</h2>
-        <p>Empty: All, Bed Frames, Chairs (Copy), Luxury Bedroom, Stationary Sets. Copy leftovers: chairs-copy, counter-ht-table-copy, living-room-set-copy. Duplicate titles: Benches, Chairs, Desks, Home Decor. Dirty URLs: dresser-1233, mirror-1-old, nightstand-old, dalyn-impact.</p>
-
-        <p class="footer-note">This audit is based on the public website, Shopify storefront JSON, on-page schema, and publicly available local-market information as of August 14, 2026. It does not include Shopify admin analytics, Merchant Center diagnostics, or GBP backend access. Connecting GA4, Ads, and GBP would refine budget and priority inside the same plan. Prepared as a client-facing growth audit for Big City Furniture.</p>
-      </section>
-    </div>
-  </main>
+  </article>
 </body>
 </html>
